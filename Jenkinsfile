@@ -1,10 +1,5 @@
 pipeline {
-  agent {
-    docker {
-      image 'node:20'
-      args '-v /var/run/docker.sock:/var/run/docker.sock'
-    }
-  }
+  agent any
 
   options {
     timestamps()
@@ -31,7 +26,7 @@ pipeline {
 
     stage('Validate') {
       steps {
-        sh 'npm run lint || true'
+        sh 'npm run lint'
         sh 'npm run typecheck'
       }
     }
@@ -61,7 +56,7 @@ pipeline {
     stage('Trigger Execution') {
       steps {
         sh '''
-        sleep 15
+        sleep 10
         curl -X POST http://localhost:3000/execute \
         -H "Content-Type: application/json" \
         -d '{"suite":"smoke","env":"qa","tags":["login"]}'

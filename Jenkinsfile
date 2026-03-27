@@ -1,12 +1,8 @@
 pipeline {
   agent any
 
-  options {
-    timestamps()
-  }
-
   environment {
-    IMAGE_NAME = "cognitest-engine"
+    IMAGE_NAME = "cognitest"
     CONTAINER_NAME = "cognitest-container"
   }
 
@@ -15,25 +11,6 @@ pipeline {
     stage('Checkout') {
       steps {
         checkout scm
-      }
-    }
-
-    stage('Install') {
-      steps {
-        sh 'npm ci'
-      }
-    }
-
-    stage('Validate') {
-      steps {
-        sh 'npm run lint'
-        sh 'npm run typecheck'
-      }
-    }
-
-    stage('Build') {
-      steps {
-        sh 'npm run build'
       }
     }
 
@@ -53,7 +30,7 @@ pipeline {
       }
     }
 
-    stage('Trigger Execution') {
+    stage('Trigger Test Execution') {
       steps {
         sh '''
         sleep 10

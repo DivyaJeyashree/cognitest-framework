@@ -4,85 +4,74 @@ pipeline {
     environment {
         IMAGE_NAME = "cognitest"
         CONTAINER_NAME = "cognitest-app"
-        PORT = "3000"
-    }
-
-    options {
-        timestamps()
+        APP_PORT = "3000"
     }
 
     stages {
 
+        stage('Checkout SCM') {
+            // Jenkins will clone the repo automatically if Pipeline script from SCM is used
+            steps {
+                checkout scm
+            }
+        }
+
         stage('Docker Build') {
             steps {
-                script {
-                    echo "Building Docker image: ${IMAGE_NAME}:${BUILD_NUMBER}"
-                    sh "docker build -t ${IMAGE_NAME}:${BUILD_NUMBER} ."
-                }
+                echo "Building Docker image..."
+                sh "docker build -t ${IMAGE_NAME}:${BUILD_NUMBER} ."
             }
         }
 
         stage('Stop Old Container') {
             steps {
-                script {
-                    sh """
-                    docker stop ${CONTAINER_NAME} || true
-                    docker rm ${CONTAINER_NAME} || true
-                    """
-                }
+                echo "Stopping and removing old container if exists..."
+                sh """
+                docker stop ${CONTAINER_NAME} || true
+                docker rm ${CONTAINER_NAME} || true
+                """
             }
         }
 
-        stage('Run Container') {
+        stage('Run Docker Container') {
             steps {
-                script {
-                    sh """
-                    docker run -d -p ${PORT}:${PORT} --name ${CONTAINER_NAME} ${IMAGE_NAME}:${BUILD_NUMBER}
-                    """
-                }
+                echo "Running Docker container..."
+                sh """
+                docker run -d -p ${APP_PORT}:${APP_PORT} --name ${CONTAINER_NAME} ${IMAGE_NAME}:${BUILD_NUMBER}
+                """
             }
         }
 
-        stage('Wait for App') {
+        stage('Wait for App to Start') {
             steps {
-                script {
-                    echo "Waiting for app to be ready on port ${PORT}..."
-                    // Wait until the server responds
-                    sh '''
-                    retries=0
-                    until curl -s http://localhost:${PORT}/health || [ $retries -eq 12 ]; do
-                        echo "Waiting 5 seconds..."
-                        sleep 5
-                        retries=$((retries+1))
-                    done
-                    '''
-                }
+                echo "Waiting for app to become ready..."
+                sh 'sleep 10'  // adjust time if your app takes longer to start
             }
         }
 
-        stage('Trigger Test Execution') {
+        stage('Trigger Cognitest Execution') {
             steps {
-                script {
-                    echo "Triggering Cognitest execution..."
-                    sh """
-                    curl -X POST http://localhost:${PORT}/execute \
-                    -H "Content-Type: application/json" \
-                    -d '{"suite":"smoke","env":"qa","tags":["login"]}'
-                    """
-                }
+                echo "Triggering Cognitest tests..."
+                sh """
+                curl -X POST http://localhost:${APP_PORT}/execute \
+                -H "Content-Type: application/json" \
+                -d '{"suite":"smoke","env":"qa","tags":["login"]}'
+                """
             }
         }
     }
 
     post {
         always {
-            script {
-                echo "Printing container logs..."
-                sh "docker logs ${CONTAINER_NAME} || true"
-            }
+            echo "Printing container logs..."
+            sh "docker logs ${CONTAINER_NAME} || true"
         }
         cleanup {
-            echo "Optional: remove old containers/images if needed"
+            echo "Cleaning up container..."
+            sh """
+            docker stop ${CONTAINER_NAME} || true
+            docker rm ${CONTAINER_NAME} || true
+            """
         }
     }
 }

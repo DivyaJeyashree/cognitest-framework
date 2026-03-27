@@ -7,11 +7,18 @@ pipeline {
         APP_PORT = "3000"
     }
 
+    options {
+        // Keep only last 10 builds to save space
+        buildDiscarder(logRotator(numToKeepStr: '10'))
+        // Fail the build if any step fails
+        failFast true
+    }
+
     stages {
 
         stage('Checkout SCM') {
-            // Jenkins will clone the repo automatically if Pipeline script from SCM is used
             steps {
+                echo "Cloning Git repository..."
                 checkout scm
             }
         }
@@ -27,8 +34,10 @@ pipeline {
             steps {
                 echo "Stopping and removing old container if exists..."
                 sh """
-                docker stop ${CONTAINER_NAME} || true
-                docker rm ${CONTAINER_NAME} || true
+                if [ \$(docker ps -a -q -f name=${CONTAINER_NAME}) ]; then
+                    docker stop ${CONTAINER_NAME} || true
+                    docker rm ${CONTAINER_NAME} || true
+                fi
                 """
             }
         }
@@ -45,7 +54,7 @@ pipeline {
         stage('Wait for App to Start') {
             steps {
                 echo "Waiting for app to become ready..."
-                sh 'sleep 10'  // adjust time if your app takes longer to start
+                sh 'sleep 15'  // increase if your app takes longer
             }
         }
 

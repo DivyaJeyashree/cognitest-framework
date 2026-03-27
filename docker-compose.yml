@@ -1,0 +1,40 @@
+version: "3.9"
+services:
+  cognitest-engine:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - LOG_LEVEL=info
+      - APPIUM_HOST=appium
+      - APPIUM_PORT=4723
+      - APPIUM_PATH=/wd/hub
+      - POSTGRES_URL=postgresql://postgres:postgres@postgres:5432/cognitest
+      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
+    depends_on:
+      - appium
+      - postgres
+      - rabbitmq
+
+  appium:
+    image: appium/appium:latest
+    ports:
+      - "4723:4723"
+
+  postgres:
+    image: postgres:16
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=cognitest
+    ports:
+      - "5432:5432"
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"

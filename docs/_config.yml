@@ -1,0 +1,22 @@
+title: Cognitest Engine Docs
+description: Hybrid automation framework documentation for web, API, and mobile testing.
+remote_theme: just-the-docs/just-the-docs
+search_enabled: true
+heading_anchors: true
+color_scheme: light
+enable_copy_code_button: true
+back_to_top: true
+back_to_top_text: Back to top
+footer_content: "Cognitest Engine documentation"
+callouts:
+  note:
+    title: Note
+    color: blue
+  tip:
+    title: Tip
+    color: green
+  warning:
+    title: Warning
+    color: yellow
+plugins:
+  - jekyll-remote-theme

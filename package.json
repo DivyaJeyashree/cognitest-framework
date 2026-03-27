@@ -1,0 +1,50 @@
+{
+  "name": "cognitest-engine",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Hybrid automation execution engine for web, api, and mobile testing",
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/main.js",
+    "dev": "tsx src/main.ts",
+    "lint": "eslint \"src/**/*.ts\"",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx src/tests/run-sample.ts",
+    "service": "tsx src/main.ts",
+    "allure:generate": "allure generate reports/allure-results --clean -o reports/allure-report"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "@faker-js/faker": "^9.8.0",
+    "amqplib": "^0.10.7",
+    "appium": "^2.18.0",
+    "axe-core": "^4.10.3",
+    "crypto-js": "^4.2.0",
+    "csv-parse": "^6.2.1",
+    "dotenv": "^16.5.0",
+    "fastify": "^5.3.3",
+    "pg": "^8.16.3",
+    "pixelmatch": "^7.1.0",
+    "pngjs": "^7.0.0",
+    "webdriverio": "^9.19.2",
+    "winston": "^3.17.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "@types/node": "^24.12.0",
+    "@types/pg": "^8.15.5",
+    "@types/pngjs": "^6.0.5",
+    "@typescript-eslint/eslint-plugin": "^8.36.0",
+    "@typescript-eslint/parser": "^8.36.0",
+    "allure-commandline": "^2.34.1",
+    "eslint": "^9.30.1",
+    "playwright": "^1.58.2",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.20.3",
+    "typescript": "^5.9.3",
+    "vitest": "^2.1.8"
+  }
+}

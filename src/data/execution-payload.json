@@ -1,0 +1,9 @@
+{
+  "suite": "smoke",
+  "env": "staging",
+  "tags": ["login", "checkout"],
+  "parallelism": 2,
+  "retries": 1,
+  "failFast": false,
+  "defectProvider": "none"
+}

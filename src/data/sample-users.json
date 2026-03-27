@@ -1,0 +1,12 @@
+[
+  {
+    "username": "qa.user",
+    "password": "Pass@12345",
+    "email": "qa.user@cognitest.local"
+  },
+  {
+    "username": "qa.admin",
+    "password": "Pass@12345",
+    "email": "qa.admin@cognitest.local"
+  }
+]

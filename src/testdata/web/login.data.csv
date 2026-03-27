@@ -1,0 +1,5 @@
+expectedResult,testcaseId,usernameValue,passwordValue,currencyName,currencyValue
+Let's explore easy transfer with our platform,reg_login,autoManuel3,Automation@123
+Invalid Username or Password,reg_valuninvpa,autoManuel3,fsdfsdf
+Invalid username/password,reg_invusvalpa,amecstsds,Automation@123
+Invalid username/password,reg_invunpa,amecstsds,Tesxcv

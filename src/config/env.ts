@@ -1,0 +1,1 @@
+export const BASE_URL = "https://canvas-preuat.muzaini.com/login";

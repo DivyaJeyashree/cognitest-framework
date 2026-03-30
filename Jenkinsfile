@@ -3,40 +3,62 @@ pipeline {
 
     environment {
         IMAGE_NAME = "cognitest"
-        CONTAINER_NAME = "cognitest-container"
+        TAG = "latest"
+        CONTAINER = "cognitest-container"
     }
 
     stages {
 
         stage('Clean Workspace') {
-            steps { cleanWs() }
-        }
-
-        stage('Checkout Code') {
-            steps { checkout scm }
-        }
-
-        stage('Docker Build') {
             steps {
-                sh 'docker build -t cognitest:${BUILD_NUMBER} .'
+                cleanWs()
             }
         }
 
-        stage('Run Tests in Container') {
+        stage('Checkout Code') {
             steps {
-                sh '''
+                git branch: 'main',
+                    url: 'https://github.com/DivyaJeyashree/cognitest-framework.git'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh """
+                docker build -t ${IMAGE_NAME}:${TAG} .
+                """
+            }
+        }
+
+        stage('Run Tests (Skip Mobile)') {
+            steps {
+                sh """
                 docker run --rm \
-                --name cognitest-container \
-                cognitest:${BUILD_NUMBER} \
+                -v \$(pwd)/allure-results:/app/reports/allure-results \
+                ${IMAGE_NAME}:${TAG} \
                 npm run test
-                '''
+                """
+            }
+        }
+
+        stage('Generate Allure Report') {
+            steps {
+                allure includeProperties: false,
+                       jdk: '',
+                       results: [[path: 'allure-results']]
             }
         }
     }
 
     post {
         always {
-            sh 'docker logs cognitest-container || true'
+            echo "Pipeline completed"
+        }
+        success {
+            echo "All tests executed successfully"
+        }
+        failure {
+            echo "Pipeline failed"
         }
     }
 }

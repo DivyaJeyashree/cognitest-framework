@@ -7,7 +7,6 @@ import type { HybridTestCase, TestContext } from "../core/base-test";
 import { SkipTestError, makeResult } from "../core/base-test";
 import type { ExecutionRequest, TestArtifact, TestResult } from "../types";
 import { logger } from "../utils/logger";
-import { startAllureTest, endAllureTest } from "../utils/allure";
 
 const isInfraDependencyError = (message: string): boolean =>
   message.includes("playwright install") ||
@@ -66,86 +65,92 @@ export class TestRunnerService {
   }
 
   private async executeAttempt(
-  test: HybridTestCase,
-  request: ExecutionRequest,
-  attempt: number
-): Promise<TestResult> {
+    test: HybridTestCase,
+    request: ExecutionRequest,
+    attempt: number
+  ): Promise<TestResult> {
+    const startedAt = Date.now();
+    logger.info({
+  event: "test_start",
+  testId: test.id,
+  name: test.name,
+});
+    const artifacts: TestArtifact[] = [];
+    const context: TestContext = {
+  env: request.env,
+  baseUrl: request.baseUrl, // ✅ ADD
+};
+    const runId = `${test.id}-${Date.now()}-${attempt}`;
 
-  const startedAt = Date.now();
-  const allureTest = startAllureTest(test.name);
+    try {
+      if (test.platform === "web") {
+        const webSession = await this.webDriver.startSession(runId);
+        context.browser = webSession.browser;
+        context.browserContext = webSession.context;
+        context.page = webSession.page;
+      }
+      if (test.platform === "api") {
+        context.apiContext = await this.apiDriver.startSession("https://jsonplaceholder.typicode.com");
+      }
+      if (test.platform === "mobile") {
+        context.mobileDriver = await this.mobileDriver.startSession(request.env);
+      }
 
-  const artifacts: TestArtifact[] = [];
-  const context: TestContext = {
-    env: request.env,
-    baseUrl: request.baseUrl,
-  };
-
-  const runId = `${test.id}-${Date.now()}-${attempt}`;
-
-  try {
-    if (test.platform === "web") {
-      const webSession = await this.webDriver.startSession(runId);
-      context.browser = webSession.browser;
-      context.browserContext = webSession.context;
-      context.page = webSession.page;
-    }
-
-    if (test.platform === "api") {
-      context.apiContext = await this.apiDriver.startSession("https://jsonplaceholder.typicode.com");
-    }
-
-    if (test.platform === "mobile") {
-      context.mobileDriver = await this.mobileDriver.startSession(request.env);
-    }
-
-    await test.run(context);
-
-    const endedAt = Date.now();
-
-    endAllureTest(allureTest, "passed");
-
-    return makeResult(test, "passed", startedAt, endedAt, attempt, artifacts);
-
-  } catch (error) {
-    const endedAt = Date.now();
-
-    const errorMessage =
-      error instanceof Error
-        ? `[${test.id}] ${error.message}`
-        : `[${test.id}] unknown error`;
-
-    if (error instanceof SkipTestError || isInfraDependencyError(errorMessage)) {
-      endAllureTest(allureTest, "skipped", errorMessage);
-      return makeResult(test, "skipped", startedAt, endedAt, attempt, artifacts, errorMessage);
-    }
-
-    endAllureTest(allureTest, "failed", errorMessage);
-
-    return makeResult(
-      test,
-      "failed",
-      startedAt,
-      endedAt,
-      attempt,
-      artifacts,
-      errorMessage
-    );
-
-  } finally {
-    if (context.apiContext) {
-      await this.apiDriver.stopSession(context.apiContext);
-    }
-
-    if (context.mobileDriver) {
-      await this.mobileDriver.stopSession(context.mobileDriver);
-    }
-
-    if (context.browser && context.browserContext && context.page) {
-      await this.webDriver.stopSession({
-        browser: context.browser,
-        context: context.browserContext,
-        page: context.page
+      await test.run(context);
+      const endedAt = Date.now();
+      return makeResult(test, "passed", startedAt, endedAt, attempt, artifacts);
+    } catch (error) {
+      const endedAt = Date.now();
+      if (error instanceof SkipTestError) {
+        return makeResult(test, "skipped", startedAt, endedAt, attempt, artifacts, error.message);
+      }
+      const errorMessage =
+  error instanceof Error
+    ? `[${test.id}] ${error.message}`
+    : `[${test.id}] unknown error`;
+      if (isInfraDependencyError(errorMessage)) {
+        return makeResult(test, "skipped", startedAt, endedAt, attempt, artifacts, errorMessage);
+      }
+      if (context.page) {
+        const screenshotPath = path.join(process.cwd(), "reports", `${runId}.png`);
+        await fs.mkdir(path.dirname(screenshotPath), { recursive: true });
+        await context.page.screenshot({ path: screenshotPath, fullPage: true });
+        artifacts.push({ type: "screenshot", path: screenshotPath });
+      }
+      logger.error({
+        event: "test_failure",
+        testId: test.id,
+        attempt,
+        message: errorMessage
       });
+      return makeResult(
+        test,
+        "failed",
+        startedAt,
+        endedAt,
+        attempt,
+        artifacts,
+        errorMessage
+      );
+    } finally {
+      if (context.apiContext) {
+        await this.apiDriver.stopSession(context.apiContext);
+      }
+      if (context.mobileDriver) {
+        await this.mobileDriver.stopSession(context.mobileDriver);
+      }
+      if (context.browser && context.browserContext && context.page) {
+        const video = context.page.video();
+        if (video) {
+          const videoPath = await video.path();
+          logger.info({ event: "video_captured", path: videoPath, testId: test.id });
+        }
+        await this.webDriver.stopSession({
+          browser: context.browser,
+          context: context.browserContext,
+          page: context.page
+        });
+      }
     }
   }
 }

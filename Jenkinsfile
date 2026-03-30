@@ -10,30 +10,22 @@ pipeline {
     stages {
 
         stage('Clean Workspace') {
-            steps {
-                cleanWs()
-            }
+            steps { cleanWs() }
         }
 
         stage('Checkout Code') {
-            steps {
-                checkout scm
-            }
+            steps { checkout scm }
         }
 
         stage('Docker Build') {
             steps {
-                sh '''
-                docker build -t cognitest:${BUILD_NUMBER} .
-                '''
+                sh 'docker build -t cognitest:${BUILD_NUMBER} .'
             }
         }
 
         stage('Stop Old Container') {
             steps {
-                sh '''
-                docker rm -f cognitest-container || true
-                '''
+                sh 'docker rm -f cognitest-container || true'
             }
         }
 
@@ -49,7 +41,14 @@ pipeline {
 
         stage('Wait for App') {
             steps {
-                sh 'sleep 30'
+                sh '''
+                echo "Waiting for app..."
+                for i in {1..20}
+                do
+                  curl -s http://localhost:3001/health && break
+                  sleep 5
+                done
+                '''
             }
         }
 
@@ -66,8 +65,8 @@ pipeline {
 
     post {
         always {
-            sh "docker logs cognitest-container || true"
-            sh "docker rm -f cognitest-container || true"
+            sh 'docker logs cognitest-container || true'
+            sh 'docker rm -f cognitest-container || true'
         }
     }
 }

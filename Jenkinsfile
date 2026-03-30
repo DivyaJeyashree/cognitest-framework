@@ -10,8 +10,6 @@ pipeline {
     options {
         // Keep only last 10 builds to save space
         buildDiscarder(logRotator(numToKeepStr: '10'))
-        // Fail the build if any step fails
-        failFast true
     }
 
     stages {
@@ -54,7 +52,7 @@ pipeline {
         stage('Wait for App to Start') {
             steps {
                 echo "Waiting for app to become ready..."
-                sh 'sleep 15'  // increase if your app takes longer
+                sh 'sleep 15'
             }
         }
 

@@ -68,7 +68,7 @@ pipeline {
             steps {
                 echo "Triggering Cognitest execution..."
                 sh """
-                curl -X POST http://localhost:${APP_PORT}/execute \
+                http://cognitest-container:3000/execute  \
                 -H "Content-Type: application/json" \
                 -d '{"suite":"smoke","env":"qa","tags":["login"]}'
                 """

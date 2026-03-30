@@ -34,7 +34,7 @@ pipeline {
 
                 mkdir -p allure-results
 
-                docker run --name $CONTAINER_NAME \
+                docker run --rm \
                   -e PLATFORM=web,api \
                   -v $(pwd)/allure-results:/app/reports/allure-results \
                   $IMAGE_NAME \
@@ -52,22 +52,9 @@ pipeline {
             }
         }
 
-        stage('Generate Allure Report') {
-            steps {
-                sh '''
-                echo "Installing Allure..."
-                npm install -g allure-commandline --unsafe-perm=true
-
-                echo "Generating report..."
-                allure generate allure-results --clean -o allure-report
-                '''
-            }
-        }
-
-        stage('Archive Reports') {
+        stage('Archive Results') {
             steps {
                 archiveArtifacts artifacts: 'allure-results/**', allowEmptyArchive: true
-                archiveArtifacts artifacts: 'allure-report/**', allowEmptyArchive: true
             }
         }
 
@@ -75,7 +62,6 @@ pipeline {
             steps {
                 allure([
                     includeProperties: false,
-                    jdk: '',
                     results: [[path: 'allure-results']]
                 ])
             }

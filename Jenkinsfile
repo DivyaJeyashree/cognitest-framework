@@ -40,19 +40,16 @@ pipeline {
             steps {
                 echo "Stopping old container if exists..."
                 sh """
-                docker stop ${CONTAINER_NAME} || true
-                docker rm ${CONTAINER_NAME} || true
+                docker rm -f ${CONTAINER_NAME} || true
                 """
             }
         }
 
         stage('Run Container') {
             steps {
-                echo "Running new container..."
+                echo "Starting new container..."
                 sh """
-                docker run -d -p ${APP_PORT}:${APP_PORT} \
-                --name ${CONTAINER_NAME} \
-                ${IMAGE_NAME}:${BUILD_NUMBER}
+                docker run -d -p ${APP_PORT}:3000 --name ${CONTAINER_NAME} ${IMAGE_NAME}:${BUILD_NUMBER}
                 """
             }
         }
@@ -60,7 +57,7 @@ pipeline {
         stage('Wait for App') {
             steps {
                 echo "Waiting for app to start..."
-                sh 'sleep 15'
+                sh "sleep 15"
             }
         }
 
@@ -68,7 +65,7 @@ pipeline {
             steps {
                 echo "Triggering Cognitest execution..."
                 sh """
-                http://cognitest-container:3000/execute  \
+                curl -X POST http://localhost:${APP_PORT}/execute \
                 -H "Content-Type: application/json" \
                 -d '{"suite":"smoke","env":"qa","tags":["login"]}'
                 """

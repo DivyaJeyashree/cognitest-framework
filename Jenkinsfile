@@ -1,64 +1,82 @@
 pipeline {
-  agent any
+    agent any
 
-  environment {
-    IMAGE_NAME = "cognitest"
-    CONTAINER_NAME = "cognitest-container"
-  }
-
-  stages {
-
-    stage('Checkout') {
-      steps {
-        checkout scm
-      }
+    environment {
+        IMAGE_NAME = "cognitest:latest"
+        CONTAINER_NAME = "cognitest-runner"
     }
 
-    stage('Docker Build') {
-      steps {
-        sh '''
-        docker build -t $IMAGE_NAME:${BUILD_NUMBER} .
-        '''
-      }
+    stages {
+
+        stage('Clean Workspace') {
+            steps {
+                cleanWs()
+            }
+        }
+
+        stage('Checkout Code') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/DivyaJeyashree/cognitest-framework.git'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t $IMAGE_NAME .'
+            }
+        }
+
+        stage('Run Tests (Web + API only)') {
+            steps {
+                sh '''
+                echo "Running tests..."
+
+                mkdir -p allure-results
+
+                docker run --rm \
+                  -e PLATFORM=web,api \
+                  -v $(pwd)/allure-results:/app/reports/allure-results \
+                  $IMAGE_NAME \
+                  npm run test -- --platform=web,api || true
+                '''
+            }
+        }
+
+        stage('Verify Results') {
+            steps {
+                sh '''
+                echo "Checking Allure results..."
+                ls -R allure-results || true
+                '''
+            }
+        }
+
+        stage('Archive Results') {
+            steps {
+                archiveArtifacts artifacts: 'allure-results/**', allowEmptyArchive: true
+            }
+        }
+
+        stage('Publish Allure Report') {
+            steps {
+                allure([
+                    includeProperties: false,
+                    results: [[path: 'allure-results']]
+                ])
+            }
+        }
     }
 
-    stage('Stop Old Container') {
-      steps {
-        sh '''
-        docker stop $CONTAINER_NAME || true
-        docker rm $CONTAINER_NAME || true
-        '''
-      }
+    post {
+        always {
+            echo 'Pipeline completed'
+        }
+        success {
+            echo 'Pipeline SUCCESS'
+        }
+        failure {
+            echo 'Pipeline FAILED'
+        }
     }
-
-    stage('Run Container') {
-      steps {
-        sh '''
-        docker run -d -p 3000:3000 --name $CONTAINER_NAME $IMAGE_NAME:${BUILD_NUMBER}
-        '''
-      }
-    }
-
-    stage('Wait for App') {
-      steps {
-        sh 'sleep 15'
-      }
-    }
-
-    stage('Trigger Test Execution') {
-      steps {
-        sh '''
-        curl -X POST http://localhost:3000/execute \
-        -H "Content-Type: application/json" \
-        -d '{"suite":"smoke","env":"qa","tags":["login"]}'
-        '''
-      }
-    }
-  }
-
-  post {
-    always {
-      sh 'docker logs $CONTAINER_NAME || true'
-    }
-  }
 }

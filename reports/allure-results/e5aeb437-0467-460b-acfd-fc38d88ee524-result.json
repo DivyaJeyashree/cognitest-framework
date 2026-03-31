@@ -1,0 +1,33 @@
+{
+  "uuid": "e5aeb437-0467-460b-acfd-fc38d88ee524",
+  "name": "Public API health validation",
+  "fullName": "API-001",
+  "status": "passed",
+  "stage": "finished",
+  "start": 1774856499453,
+  "stop": 1774856499483,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "smoke"
+    },
+    {
+      "name": "framework",
+      "value": "cognitest"
+    },
+    {
+      "name": "platform",
+      "value": "api"
+    },
+    {
+      "name": "tag",
+      "value": "checkout"
+    },
+    {
+      "name": "tag",
+      "value": "smoke"
+    }
+  ],
+  "links": [],
+  "attachments": []
+}

@@ -1,0 +1,5 @@
+{
+  "username": "autoManuel3",
+  "password": "fsdfsdf",
+  "url": "https://canvas-preuat.muzaini.com/"
+}

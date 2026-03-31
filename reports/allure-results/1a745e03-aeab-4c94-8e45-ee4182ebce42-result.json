@@ -1,0 +1,33 @@
+{
+  "uuid": "1a745e03-aeab-4c94-8e45-ee4182ebce42",
+  "name": "Mobile login smoke validation",
+  "fullName": "MOB-001",
+  "status": "skipped",
+  "stage": "finished",
+  "start": 1774856499521,
+  "stop": 1774856502668,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "smoke"
+    },
+    {
+      "name": "framework",
+      "value": "cognitest"
+    },
+    {
+      "name": "platform",
+      "value": "mobile"
+    },
+    {
+      "name": "tag",
+      "value": "login"
+    },
+    {
+      "name": "tag",
+      "value": "mobile"
+    }
+  ],
+  "links": [],
+  "attachments": []
+}

@@ -1,0 +1,40 @@
+{
+  "uuid": "baaee588-d2a8-462f-9dfb-94187a22af25",
+  "name": "Rate API Test",
+  "fullName": "API-002",
+  "status": "passed",
+  "stage": "finished",
+  "start": 1774856499484,
+  "stop": 1774856499491,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "smoke"
+    },
+    {
+      "name": "framework",
+      "value": "cognitest"
+    },
+    {
+      "name": "platform",
+      "value": "api"
+    },
+    {
+      "name": "tag",
+      "value": "rate"
+    }
+  ],
+  "links": [],
+  "attachments": [
+    {
+      "name": "API Request",
+      "type": "text/plain",
+      "source": "baaee588-d2a8-462f-9dfb-94187a22af25-attachment-0.txt"
+    },
+    {
+      "name": "API Response",
+      "type": "text/plain",
+      "source": "baaee588-d2a8-462f-9dfb-94187a22af25-attachment-1.txt"
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+{
+  "email": "support@almuzaini.com",
+  "phone": "+965-12345678"
+}

@@ -1,0 +1,4 @@
+username,password,expectedStatus
+amecstage2,Test@123,200
+wronguser,Test@123,401
+amecstage2,wrongpass,401

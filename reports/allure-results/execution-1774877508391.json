@@ -1,0 +1,130 @@
+{
+  "request": {
+    "suite": "smoke",
+    "env": "staging",
+    "tags": [
+      "login",
+      "checkout"
+    ],
+    "parallelism": 2,
+    "retries": 1,
+    "failFast": false,
+    "defectProvider": "none"
+  },
+  "total": 7,
+  "passed": 6,
+  "failed": 0,
+  "skipped": 1,
+  "durationMs": 36664,
+  "results": [
+    {
+      "id": "WEB-001",
+      "name": "Example home page smoke validation",
+      "suite": "smoke",
+      "platform": "web",
+      "tags": [
+        "login",
+        "smoke"
+      ],
+      "status": "passed",
+      "startedAt": "2026-03-30T13:31:11.729Z",
+      "endedAt": "2026-03-30T13:31:19.618Z",
+      "durationMs": 7889,
+      "retries": 0,
+      "artifacts": []
+    },
+    {
+      "id": "reg_login",
+      "name": "Login Test - reg_login",
+      "suite": "smoke",
+      "platform": "web",
+      "tags": [
+        "login"
+      ],
+      "status": "passed",
+      "startedAt": "2026-03-30T13:31:11.735Z",
+      "endedAt": "2026-03-30T13:31:27.869Z",
+      "durationMs": 16134,
+      "retries": 0,
+      "artifacts": []
+    },
+    {
+      "id": "reg_valuninvpa",
+      "name": "Login Test - reg_valuninvpa",
+      "suite": "smoke",
+      "platform": "web",
+      "tags": [
+        "login"
+      ],
+      "status": "passed",
+      "startedAt": "2026-03-30T13:31:21.267Z",
+      "endedAt": "2026-03-30T13:31:30.544Z",
+      "durationMs": 9277,
+      "retries": 0,
+      "artifacts": []
+    },
+    {
+      "id": "reg_invusvalpa",
+      "name": "Login Test - reg_invusvalpa",
+      "suite": "smoke",
+      "platform": "web",
+      "tags": [
+        "login"
+      ],
+      "status": "passed",
+      "startedAt": "2026-03-30T13:31:29.505Z",
+      "endedAt": "2026-03-30T13:31:37.920Z",
+      "durationMs": 8415,
+      "retries": 0,
+      "artifacts": []
+    },
+    {
+      "id": "API-001",
+      "name": "Public API health validation",
+      "suite": "smoke",
+      "platform": "api",
+      "tags": [
+        "checkout",
+        "smoke"
+      ],
+      "status": "passed",
+      "startedAt": "2026-03-30T13:31:39.431Z",
+      "endedAt": "2026-03-30T13:31:39.688Z",
+      "durationMs": 257,
+      "retries": 0,
+      "artifacts": []
+    },
+    {
+      "id": "MOB-001",
+      "name": "Mobile login smoke validation",
+      "suite": "smoke",
+      "platform": "mobile",
+      "tags": [
+        "login",
+        "mobile"
+      ],
+      "status": "skipped",
+      "startedAt": "2026-03-30T13:31:39.689Z",
+      "endedAt": "2026-03-30T13:31:48.147Z",
+      "durationMs": 8458,
+      "retries": 0,
+      "artifacts": [],
+      "error": "[MOB-001] Unable to connect to \"http://127.0.0.1:4723/wd/hub\", make sure browser driver is running on that address.\nIt seems like the service failed to start or is rejecting any connections."
+    },
+    {
+      "id": "reg_invunpa",
+      "name": "Login Test - reg_invunpa",
+      "suite": "smoke",
+      "platform": "web",
+      "tags": [
+        "login"
+      ],
+      "status": "passed",
+      "startedAt": "2026-03-30T13:31:31.569Z",
+      "endedAt": "2026-03-30T13:31:46.607Z",
+      "durationMs": 15038,
+      "retries": 0,
+      "artifacts": []
+    }
+  ]
+}

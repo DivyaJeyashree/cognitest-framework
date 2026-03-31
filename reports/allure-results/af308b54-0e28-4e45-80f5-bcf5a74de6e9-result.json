@@ -1,0 +1,50 @@
+{
+  "uuid": "af308b54-0e28-4e45-80f5-bcf5a74de6e9",
+  "name": "Login Test - reg_invunpa",
+  "fullName": "reg_invunpa",
+  "status": "passed",
+  "stage": "finished",
+  "start": 1774856489806,
+  "stop": 1774856498456,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "smoke"
+    },
+    {
+      "name": "framework",
+      "value": "cognitest"
+    },
+    {
+      "name": "platform",
+      "value": "web"
+    },
+    {
+      "name": "tag",
+      "value": "web"
+    }
+  ],
+  "links": [],
+  "attachments": [
+    {
+      "name": "Login Request",
+      "type": "text/plain",
+      "source": "af308b54-0e28-4e45-80f5-bcf5a74de6e9-attachment-0.txt"
+    },
+    {
+      "name": "Login Response",
+      "type": "text/plain",
+      "source": "af308b54-0e28-4e45-80f5-bcf5a74de6e9-attachment-1.txt"
+    },
+    {
+      "name": "Current URL",
+      "type": "text/plain",
+      "source": "af308b54-0e28-4e45-80f5-bcf5a74de6e9-attachment-2.txt"
+    },
+    {
+      "name": "Page HTML",
+      "type": "text/plain",
+      "source": "af308b54-0e28-4e45-80f5-bcf5a74de6e9-attachment-3.txt"
+    }
+  ]
+}

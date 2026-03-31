@@ -1,0 +1,54 @@
+{
+  "uuid": "78c268a0-d35e-4284-898e-59724bd229c0",
+  "name": "Negative Test - Invalid Currency Code",
+  "fullName": "API-005",
+  "status": "failed",
+  "stage": "finished",
+  "start": 1774856499516,
+  "stop": 1774856499520,
+  "statusDetails": {
+    "message": "Negative test failed: API accepted invalid currency",
+    "trace": "Negative test failed: API accepted invalid currency"
+  },
+  "labels": [
+    {
+      "name": "suite",
+      "value": "smoke"
+    },
+    {
+      "name": "framework",
+      "value": "cognitest"
+    },
+    {
+      "name": "platform",
+      "value": "api"
+    },
+    {
+      "name": "tag",
+      "value": "api"
+    },
+    {
+      "name": "tag",
+      "value": "negative"
+    }
+  ],
+  "links": [
+    {
+      "name": "JIRA",
+      "url": "https://srish7035.atlassian.net/browse/SCRUM-95",
+      "type": "issue"
+    }
+  ],
+  "attachments": [
+    {
+      "name": "API Request",
+      "type": "text/plain",
+      "source": "78c268a0-d35e-4284-898e-59724bd229c0-attachment-0.txt"
+    },
+    {
+      "name": "API Response",
+      "type": "text/plain",
+      "source": "78c268a0-d35e-4284-898e-59724bd229c0-attachment-1.txt"
+    }
+  ]
+}

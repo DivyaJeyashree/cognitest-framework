@@ -1,0 +1,130 @@
+{
+  "request": {
+    "suite": "smoke",
+    "env": "staging",
+    "tags": [
+      "login",
+      "checkout"
+    ],
+    "parallelism": 2,
+    "retries": 1,
+    "failFast": false,
+    "defectProvider": "none"
+  },
+  "total": 7,
+  "passed": 6,
+  "failed": 0,
+  "skipped": 1,
+  "durationMs": 31766,
+  "results": [
+    {
+      "id": "WEB-001",
+      "name": "Example home page smoke validation",
+      "suite": "smoke",
+      "platform": "web",
+      "tags": [
+        "login",
+        "smoke"
+      ],
+      "status": "passed",
+      "startedAt": "2026-03-31T04:49:56.960Z",
+      "endedAt": "2026-03-31T04:50:01.647Z",
+      "durationMs": 4687,
+      "retries": 0,
+      "artifacts": []
+    },
+    {
+      "id": "reg_login",
+      "name": "Login Test - reg_login",
+      "suite": "smoke",
+      "platform": "web",
+      "tags": [
+        "login"
+      ],
+      "status": "passed",
+      "startedAt": "2026-03-31T04:49:56.969Z",
+      "endedAt": "2026-03-31T04:50:10.344Z",
+      "durationMs": 13375,
+      "retries": 0,
+      "artifacts": []
+    },
+    {
+      "id": "reg_valuninvpa",
+      "name": "Login Test - reg_valuninvpa",
+      "suite": "smoke",
+      "platform": "web",
+      "tags": [
+        "login"
+      ],
+      "status": "passed",
+      "startedAt": "2026-03-31T04:50:02.124Z",
+      "endedAt": "2026-03-31T04:50:10.935Z",
+      "durationMs": 8811,
+      "retries": 0,
+      "artifacts": []
+    },
+    {
+      "id": "reg_invunpa",
+      "name": "Login Test - reg_invunpa",
+      "suite": "smoke",
+      "platform": "web",
+      "tags": [
+        "login"
+      ],
+      "status": "passed",
+      "startedAt": "2026-03-31T04:50:11.230Z",
+      "endedAt": "2026-03-31T04:50:19.871Z",
+      "durationMs": 8641,
+      "retries": 0,
+      "artifacts": []
+    },
+    {
+      "id": "reg_invusvalpa",
+      "name": "Login Test - reg_invusvalpa",
+      "suite": "smoke",
+      "platform": "web",
+      "tags": [
+        "login"
+      ],
+      "status": "passed",
+      "startedAt": "2026-03-31T04:50:11.216Z",
+      "endedAt": "2026-03-31T04:50:20.475Z",
+      "durationMs": 9259,
+      "retries": 0,
+      "artifacts": []
+    },
+    {
+      "id": "API-001",
+      "name": "Public API health validation",
+      "suite": "smoke",
+      "platform": "api",
+      "tags": [
+        "checkout",
+        "smoke"
+      ],
+      "status": "passed",
+      "startedAt": "2026-03-31T04:50:20.783Z",
+      "endedAt": "2026-03-31T04:50:27.393Z",
+      "durationMs": 6610,
+      "retries": 0,
+      "artifacts": []
+    },
+    {
+      "id": "MOB-001",
+      "name": "Mobile login smoke validation",
+      "suite": "smoke",
+      "platform": "mobile",
+      "tags": [
+        "login",
+        "mobile"
+      ],
+      "status": "skipped",
+      "startedAt": "2026-03-31T04:50:20.786Z",
+      "endedAt": "2026-03-31T04:50:28.721Z",
+      "durationMs": 7935,
+      "retries": 0,
+      "artifacts": [],
+      "error": "[MOB-001] Unable to connect to \"http://127.0.0.1:4723/wd/hub\", make sure browser driver is running on that address.\nIt seems like the service failed to start or is rejecting any connections."
+    }
+  ]
+}

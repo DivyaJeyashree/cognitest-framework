@@ -1,0 +1,12 @@
+{
+  "branches": [
+    {
+      "id": 1,
+      "name": "Kuwait City"
+    },
+    {
+      "id": 2,
+      "name": "Salmiya"
+    }
+  ]
+}

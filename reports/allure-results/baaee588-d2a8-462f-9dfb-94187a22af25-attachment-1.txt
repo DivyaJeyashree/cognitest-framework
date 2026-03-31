@@ -1,0 +1,6 @@
+{
+  "amount": 100,
+  "currency": "USD",
+  "rate": 0.3,
+  "convertedAmount": 30
+}

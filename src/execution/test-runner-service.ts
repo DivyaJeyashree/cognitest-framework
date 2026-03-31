@@ -13,6 +13,34 @@ const isInfraDependencyError = (message: string): boolean =>
   message.includes("Executable doesn't exist") ||
   message.includes("Unable to connect to \"http://127.0.0.1:4723/wd/hub\"");
 
+
+// ✅ ✅ ADD THIS HELPER FUNCTION
+async function writeAllureResult(
+  testId: string,
+  name: string,
+  status: string,
+  start: number,
+  stop: number
+) {
+  const uuid = `${testId}-${Date.now()}`;
+
+  const allureResult = {
+    uuid,
+    name,
+    status,
+    start,
+    stop
+  };
+
+  await fs.mkdir("allure-results", { recursive: true });
+
+  await fs.writeFile(
+    path.join("allure-results", `${uuid}-result.json`),
+    JSON.stringify(allureResult, null, 2)
+  );
+}
+
+
 export class TestRunnerService {
   constructor(
     private readonly webDriver = new WebDriver(),
@@ -28,15 +56,14 @@ export class TestRunnerService {
 
     const worker = async (): Promise<void> => {
       while (queue.length > 0) {
-        if (request.failFast && shouldStop) {
-          return;
-        }
+        if (request.failFast && shouldStop) return;
+
         const test = queue.shift();
-        if (!test) {
-          return;
-        }
+        if (!test) return;
+
         const result = await this.runSingleTest(test, request);
         results.push(result);
+
         if (request.failFast && result.status === "failed") {
           shouldStop = true;
           return;
@@ -55,9 +82,11 @@ export class TestRunnerService {
 
     while (attempt <= retries) {
       finalResult = await this.executeAttempt(test, request, attempt);
+
       if (finalResult.status === "passed" || finalResult.status === "skipped") {
         return finalResult;
       }
+
       attempt += 1;
     }
 
@@ -69,60 +98,91 @@ export class TestRunnerService {
     request: ExecutionRequest,
     attempt: number
   ): Promise<TestResult> {
+
     const startedAt = Date.now();
+
     logger.info({
-  event: "test_start",
-  testId: test.id,
-  name: test.name,
-});
+      event: "test_start",
+      testId: test.id,
+      name: test.name,
+    });
+
     const artifacts: TestArtifact[] = [];
+
     const context: TestContext = {
-  env: request.env,
-  baseUrl: request.baseUrl, // ✅ ADD
-};
+      env: request.env,
+      baseUrl: request.baseUrl,
+    };
+
     const runId = `${test.id}-${Date.now()}-${attempt}`;
 
     try {
+      // 🔹 Start drivers
       if (test.platform === "web") {
         const webSession = await this.webDriver.startSession(runId);
         context.browser = webSession.browser;
         context.browserContext = webSession.context;
         context.page = webSession.page;
       }
+
       if (test.platform === "api") {
         context.apiContext = await this.apiDriver.startSession("https://jsonplaceholder.typicode.com");
       }
+
       if (test.platform === "mobile") {
         context.mobileDriver = await this.mobileDriver.startSession(request.env);
       }
 
+      // 🔹 Run test
       await test.run(context);
+
       const endedAt = Date.now();
+
+      // ✅ WRITE ALLURE RESULT
+      await writeAllureResult(test.id, test.name, "passed", startedAt, endedAt);
+
       return makeResult(test, "passed", startedAt, endedAt, attempt, artifacts);
+
     } catch (error) {
       const endedAt = Date.now();
+
       if (error instanceof SkipTestError) {
+        await writeAllureResult(test.id, test.name, "skipped", startedAt, endedAt);
+
         return makeResult(test, "skipped", startedAt, endedAt, attempt, artifacts, error.message);
       }
+
       const errorMessage =
-  error instanceof Error
-    ? `[${test.id}] ${error.message}`
-    : `[${test.id}] unknown error`;
+        error instanceof Error
+          ? `[${test.id}] ${error.message}`
+          : `[${test.id}] unknown error`;
+
       if (isInfraDependencyError(errorMessage)) {
+        await writeAllureResult(test.id, test.name, "skipped", startedAt, endedAt);
+
         return makeResult(test, "skipped", startedAt, endedAt, attempt, artifacts, errorMessage);
       }
+
+      // Screenshot
       if (context.page) {
         const screenshotPath = path.join(process.cwd(), "reports", `${runId}.png`);
         await fs.mkdir(path.dirname(screenshotPath), { recursive: true });
+
         await context.page.screenshot({ path: screenshotPath, fullPage: true });
+
         artifacts.push({ type: "screenshot", path: screenshotPath });
       }
+
       logger.error({
         event: "test_failure",
         testId: test.id,
         attempt,
         message: errorMessage
       });
+
+      // ✅ WRITE ALLURE RESULT
+      await writeAllureResult(test.id, test.name, "failed", startedAt, endedAt);
+
       return makeResult(
         test,
         "failed",
@@ -132,19 +192,24 @@ export class TestRunnerService {
         artifacts,
         errorMessage
       );
+
     } finally {
       if (context.apiContext) {
         await this.apiDriver.stopSession(context.apiContext);
       }
+
       if (context.mobileDriver) {
         await this.mobileDriver.stopSession(context.mobileDriver);
       }
+
       if (context.browser && context.browserContext && context.page) {
         const video = context.page.video();
+
         if (video) {
           const videoPath = await video.path();
           logger.info({ event: "video_captured", path: videoPath, testId: test.id });
         }
+
         await this.webDriver.stopSession({
           browser: context.browser,
           context: context.browserContext,

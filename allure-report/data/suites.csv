@@ -1,0 +1,8 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"","4248","Example home page smoke validation","","2026-03-31","passed","2026-03-31","","","",""
+"","2938","Mobile login smoke validation","","2026-03-31","skipped","2026-03-31","","","",""
+"","9357","Login Test - reg_invunpa","","2026-03-31","passed","2026-03-31","","","",""
+"","9623","Login Test - reg_invusvalpa","","2026-03-31","passed","2026-03-31","","","",""
+"","567","Public API health validation","","2026-03-31","passed","2026-03-31","","","",""
+"","15999","Login Test - reg_valuninvpa","","2026-03-31","passed","2026-03-31","","","",""
+"","14744","Login Test - reg_login","","2026-03-31","passed","2026-03-31","","","",""

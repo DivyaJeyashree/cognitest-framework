@@ -1,0 +1,40 @@
+{
+  "uuid": "4656d574-a5c1-41c8-ae3a-6b9a9700bb4b",
+  "name": "Support API Test",
+  "fullName": "API-004",
+  "status": "passed",
+  "stage": "finished",
+  "start": 1774856499498,
+  "stop": 1774856499502,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "smoke"
+    },
+    {
+      "name": "framework",
+      "value": "cognitest"
+    },
+    {
+      "name": "platform",
+      "value": "api"
+    },
+    {
+      "name": "tag",
+      "value": "support"
+    }
+  ],
+  "links": [],
+  "attachments": [
+    {
+      "name": "API Request",
+      "type": "text/plain",
+      "source": "4656d574-a5c1-41c8-ae3a-6b9a9700bb4b-attachment-0.txt"
+    },
+    {
+      "name": "API Response",
+      "type": "text/plain",
+      "source": "4656d574-a5c1-41c8-ae3a-6b9a9700bb4b-attachment-1.txt"
+    }
+  ]
+}

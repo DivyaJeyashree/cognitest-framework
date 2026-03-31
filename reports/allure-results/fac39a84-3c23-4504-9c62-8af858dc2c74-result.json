@@ -1,0 +1,40 @@
+{
+  "uuid": "fac39a84-3c23-4504-9c62-8af858dc2c74",
+  "name": "Homepage validation",
+  "fullName": "WEB-001",
+  "status": "passed",
+  "stage": "finished",
+  "start": 1774856499419,
+  "stop": 1774856508142,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "smoke"
+    },
+    {
+      "name": "framework",
+      "value": "cognitest"
+    },
+    {
+      "name": "platform",
+      "value": "web"
+    },
+    {
+      "name": "tag",
+      "value": "web"
+    }
+  ],
+  "links": [],
+  "attachments": [
+    {
+      "name": "Current URL",
+      "type": "text/plain",
+      "source": "fac39a84-3c23-4504-9c62-8af858dc2c74-attachment-0.txt"
+    },
+    {
+      "name": "Page HTML",
+      "type": "text/plain",
+      "source": "fac39a84-3c23-4504-9c62-8af858dc2c74-attachment-1.txt"
+    }
+  ]
+}

@@ -1,0 +1,3 @@
+amount,currency,expectedStatus
+100,KWD,200
+250,KWD,200

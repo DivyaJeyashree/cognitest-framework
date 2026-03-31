@@ -1,0 +1,40 @@
+{
+  "uuid": "229c2e01-1e79-4004-943b-d210b5993917",
+  "name": "Branches API Test",
+  "fullName": "API-003",
+  "status": "passed",
+  "stage": "finished",
+  "start": 1774856499492,
+  "stop": 1774856499497,
+  "labels": [
+    {
+      "name": "suite",
+      "value": "smoke"
+    },
+    {
+      "name": "framework",
+      "value": "cognitest"
+    },
+    {
+      "name": "platform",
+      "value": "api"
+    },
+    {
+      "name": "tag",
+      "value": "branches"
+    }
+  ],
+  "links": [],
+  "attachments": [
+    {
+      "name": "API Request",
+      "type": "text/plain",
+      "source": "229c2e01-1e79-4004-943b-d210b5993917-attachment-0.txt"
+    },
+    {
+      "name": "API Response",
+      "type": "text/plain",
+      "source": "229c2e01-1e79-4004-943b-d210b5993917-attachment-1.txt"
+    }
+  ]
+}
